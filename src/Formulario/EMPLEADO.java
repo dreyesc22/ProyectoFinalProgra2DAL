@@ -4,6 +4,14 @@
  */
 package Formulario;
 
+import Conexion.CreateConection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author 15EGO500LA
@@ -14,9 +22,28 @@ public class EMPLEADO extends javax.swing.JFrame {
 
     /**
      * Creates new form Sesion
+     * 
      */
-    public EMPLEADO() {
+    
+    private void limpiarCampos() {
+    txtId.setText("");
+    txtNombre.setText("");
+    txtApellido.setText("");
+    txtCargo.setText("");
+    txtTelefono.setText("");
+    txtDirección.setText("");
+    txtEstado.setText("");
+    txtFechaDeIngreso.setText("");
+    txtSalario.setText("");
+    txtEmail.setText("");
+    }
+    CreateConection conexionPostgres = new CreateConection();
+    Connection con;
+
+    public EMPLEADO() throws SQLException {
+        con = conexionPostgres.getConection();
         initComponents();
+        
     }
 
     /**
@@ -54,6 +81,7 @@ public class EMPLEADO extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         lbID = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
+        btnVerTodos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +98,11 @@ public class EMPLEADO extends javax.swing.JFrame {
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/LOGO.png"))); // NOI18N
 
         btnRegistro.setText("Registro");
+        btnRegistro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistroActionPerformed(evt);
+            }
+        });
 
         lblCargo.setFont(new java.awt.Font("Anton SC", 2, 12)); // NOI18N
         lblCargo.setForeground(new java.awt.Color(255, 255, 255));
@@ -100,6 +133,11 @@ public class EMPLEADO extends javax.swing.JFrame {
         lblEmail.setText("Email");
 
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -118,6 +156,13 @@ public class EMPLEADO extends javax.swing.JFrame {
         lbID.setFont(new java.awt.Font("Anton SC", 2, 12)); // NOI18N
         lbID.setForeground(new java.awt.Color(255, 255, 255));
         lbID.setText("ID");
+
+        btnVerTodos.setText("Ver Todos");
+        btnVerTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -178,6 +223,8 @@ public class EMPLEADO extends javax.swing.JFrame {
                 .addComponent(btnEliminar)
                 .addGap(18, 18, 18)
                 .addComponent(btnBuscar)
+                .addGap(18, 18, 18)
+                .addComponent(btnVerTodos)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -197,9 +244,9 @@ public class EMPLEADO extends javax.swing.JFrame {
                             .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,7 +275,8 @@ public class EMPLEADO extends javax.swing.JFrame {
                     .addComponent(btnRegistro)
                     .addComponent(btnModificar)
                     .addComponent(btnEliminar)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btnVerTodos))
                 .addGap(45, 45, 45))
         );
 
@@ -252,12 +300,162 @@ public class EMPLEADO extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        try {
+        int id = Integer.parseInt(txtId.getText());
+        String sql = "UPDATE empleados SET estado = FALSE WHERE empleado_id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, id);
+
+        int filas = pst.executeUpdate();
+        if (filas > 0) {
+            JOptionPane.showMessageDialog(this, "Empleado desactivado correctamente");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el empleado");
+        }
+
+        pst.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al eliminar empleado: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Ingrese un ID válido");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        try {
+        int id = Integer.parseInt(txtId.getText());
+        String sql = "SELECT * FROM empleados WHERE empleado_id = ? AND estado = TRUE";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, id);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            txtNombre.setText(rs.getString("nombre"));
+            txtApellido.setText(rs.getString("apellido"));
+            txtCargo.setText(rs.getString("cargo"));
+            txtTelefono.setText(rs.getString("telefono"));
+            txtDirección.setText(rs.getString("direccion"));
+            txtEstado.setText(rs.getBoolean("estado") ? "Activo" : "Inactivo");
+            txtFechaDeIngreso.setText(rs.getString("fecha_ingreso"));
+            txtSalario.setText(String.valueOf(rs.getDouble("salario")));
+            txtEmail.setText(rs.getString("email"));
+        } else {
+            JOptionPane.showMessageDialog(this, "Empleado no encontrado o inactivo");
+        }
+
+        rs.close();
+        pst.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar empleado: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Ingrese un ID válido");
+    }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
+        try {
+        String sql = "INSERT INTO empleados (nombre, apellido, cargo, telefono, direccion, estado, fecha_ingreso, salario, email) "
+                   + "VALUES (?, ?, ?, ?, ?, TRUE, ?, ?, ?)";
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setString(1, txtNombre.getText());
+        pst.setString(2, txtApellido.getText());
+        pst.setString(3, txtCargo.getText());
+        pst.setString(4, txtTelefono.getText());
+        pst.setString(5, txtDirección.getText());
+        pst.setDate(6, java.sql.Date.valueOf(txtFechaDeIngreso.getText())); // Formato YYYY-MM-DD
+        pst.setDouble(7, Double.parseDouble(txtSalario.getText()));
+        pst.setString(8, txtEmail.getText());
+
+        pst.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Empleado registrado correctamente");
+        limpiarCampos();
+
+        pst.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al registrar empleado: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Verifique los datos ingresados (especialmente la fecha y el salario)");
+    }
+    }//GEN-LAST:event_btnRegistroActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        try {
+        int id = Integer.parseInt(txtId.getText());
+        String sql = "UPDATE empleados SET nombre=?, apellido=?, cargo=?, telefono=?, direccion=?, "
+                   + "fecha_ingreso=?, salario=?, email=? WHERE empleado_id=?";
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setString(1, txtNombre.getText());
+        pst.setString(2, txtApellido.getText());
+        pst.setString(3, txtCargo.getText());
+        pst.setString(4, txtTelefono.getText());
+        pst.setString(5, txtDirección.getText());
+        pst.setDate(6, java.sql.Date.valueOf(txtFechaDeIngreso.getText()));
+        pst.setDouble(7, Double.parseDouble(txtSalario.getText()));
+        pst.setString(8, txtEmail.getText());
+        pst.setInt(9, id);
+
+        int filas = pst.executeUpdate();
+        if (filas > 0) {
+            JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el empleado");
+        }
+
+        pst.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al modificar empleado: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Verifique los datos ingresados");
+    }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnVerTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosActionPerformed
+        try {
+        String sql = "SELECT empleado_id, nombre, apellido, cargo, telefono, email FROM empleados WHERE estado = TRUE";
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        StringBuilder tabla = new StringBuilder();
+        tabla.append(String.format("%-5s | %-20s | %-15s | %-12s | %-25s%n", 
+                "ID", "Nombre", "Cargo", "Teléfono", "Email"));
+        tabla.append("-------------------------------------------------------------------------------\n");
+
+        boolean hayDatos = false;
+        while (rs.next()) {
+            hayDatos = true;
+            String nombreCompleto = rs.getString("nombre") + " " + rs.getString("apellido");
+            tabla.append(String.format("%-5d | %-20s | %-15s | %-12s | %-25s%n",
+                    rs.getInt("empleado_id"),
+                    nombreCompleto,
+                    rs.getString("cargo"),
+                    rs.getString("telefono"),
+                    rs.getString("email")));
+        }
+
+        if (hayDatos) {
+            javax.swing.JTextArea ta = new javax.swing.JTextArea(tabla.toString());
+            ta.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12)); // fuente monoespaciada
+            JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(ta), "Empleados activos", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay empleados activos registrados.");
+        }
+
+        rs.close();
+        pst.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener empleados: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnVerTodosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -281,7 +479,13 @@ public class EMPLEADO extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new EMPLEADO().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new EMPLEADO().setVisible(true);
+            } catch (SQLException ex) {
+                System.getLogger(EMPLEADO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -289,6 +493,7 @@ public class EMPLEADO extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegistro;
+    private javax.swing.JButton btnVerTodos;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbID;
     private javax.swing.JLabel lbNombre;
@@ -312,4 +517,6 @@ public class EMPLEADO extends javax.swing.JFrame {
     private javax.swing.JTextField txtSalario;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
+
+    
 }

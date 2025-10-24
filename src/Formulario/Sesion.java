@@ -4,6 +4,12 @@
  */
 package Formulario;
 
+import Conexion.CreateConection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane; 
+
 /**
  *
  * @author 15EGO500LA
@@ -51,6 +57,11 @@ public class Sesion extends javax.swing.JFrame {
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/LOGO.png"))); // NOI18N
 
         btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -109,6 +120,70 @@ public class Sesion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+    String usuario = txtUsuario.getText().trim();
+    String clave = txtUsuario1.getText().trim(); // tu segundo campo de texto es para la contraseña
+
+    if (usuario.isEmpty() || clave.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debe ingresar usuario y contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        CreateConection conexionPostgres = new CreateConection();
+        Connection con = conexionPostgres.getConection();
+
+        // 🔹 Se agregó la condición "AND estado = TRUE" para impedir acceso a usuarios dados de baja
+        String sql = "SELECT nombre_usuario, rol FROM usuarios WHERE nombre_usuario = ? AND clave = ? AND estado = TRUE;";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, usuario);
+        pst.setString(2, clave);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            String rol = rs.getString("rol");
+            JOptionPane.showMessageDialog(this, "Bienvenido " + usuario + " (" + rol + ")");
+
+            // Redirigir según el rol
+            if (rol.equalsIgnoreCase("administrador")) {
+                new restaurante.MainPrincipal(usuario, rol).setVisible(true);
+            } else if (rol.equalsIgnoreCase("cajero")) {
+                new Formulario.Factura().setVisible(true);
+            } else if (rol.equalsIgnoreCase("mesero")) {
+                new Formulario.Factura().setVisible(true); // puedes crear otra interfaz si deseas
+            }
+
+            this.dispose(); // cierra la ventana de login
+        } else {
+            // 🔸 Mensaje claro cuando el usuario existe pero está dado de baja
+            String sqlEstado = "SELECT estado FROM usuarios WHERE nombre_usuario = ? AND clave = ?";
+            PreparedStatement pstEstado = con.prepareStatement(sqlEstado);
+            pstEstado.setString(1, usuario);
+            pstEstado.setString(2, clave);
+            ResultSet rsEstado = pstEstado.executeQuery();
+
+            if (rsEstado.next() && !rsEstado.getBoolean("estado")) {
+                JOptionPane.showMessageDialog(this, "El usuario ha sido dado de baja. Contacte al administrador.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            rsEstado.close();
+            pstEstado.close();
+        }
+
+        rs.close();
+        pst.close();
+        con.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+        
+        
+    }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
