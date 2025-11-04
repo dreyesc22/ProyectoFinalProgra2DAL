@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
  *
  * @author 15EGO500LA
  */
-public class Sesion extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Sesion.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 
     /**
      * Creates new form Sesion
      */
-    public Sesion() {
+    public Login() {
         initComponents();
     }
 
@@ -207,7 +207,7 @@ public class Sesion extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Sesion().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -16,9 +16,9 @@ import javax.swing.JOptionPane;
  *
  * @author 15EGO500LA
  */
-public class EMPLEADO extends javax.swing.JFrame {
+public class Empleado extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EMPLEADO.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Empleado.class.getName());
 
     /**
      * Creates new form Sesion
@@ -40,7 +40,7 @@ public class EMPLEADO extends javax.swing.JFrame {
     CreateConection conexionPostgres = new CreateConection();
     Connection con;
 
-    public EMPLEADO() throws SQLException {
+    public Empleado() throws SQLException {
         con = conexionPostgres.getConection();
         initComponents();
         
@@ -481,9 +481,9 @@ public class EMPLEADO extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                new EMPLEADO().setVisible(true);
+                new Empleado().setVisible(true);
             } catch (SQLException ex) {
-                System.getLogger(EMPLEADO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                System.getLogger(Empleado.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         });
     }
