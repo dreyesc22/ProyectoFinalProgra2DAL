@@ -4,30 +4,31 @@
  */
 package Formulario;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import static java.awt.print.Printable.NO_SUCH_PAGE;
-import static java.awt.print.Printable.PAGE_EXISTS;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
+
+import Conexion.CreateConection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author 15EGO500LA
- */
+
 public class Clientes extends javax.swing.JFrame {
-    
+
+    CreateConection conexionPostgres = new CreateConection();
+    Connection con;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Clientes.class.getName());
 
-    /**
-     * Creates new form Sesion
-     */
     public Clientes() {
         initComponents();
+        try {
+            con = conexionPostgres.getConection();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage());
+        }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -325,15 +326,70 @@ public class Clientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "UPDATE clientes SET estado = FALSE WHERE cliente_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(txtId.getText()));
+
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(this, "Cliente eliminado (inactivado) correctamente");
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el cliente");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar cliente: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
+        try {
+            String sql = "INSERT INTO clientes (nombre, telefono, correo, direccion, fecha_ingreso, estado) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, txtINombre.getText());
+            ps.setString(2, txtTeléfono.getText());
+            ps.setString(3, txtCorreo.getText());
+            ps.setString(4, txtDireccion.getText());
+            ps.setDate(5, java.sql.Date.valueOf(txtFechaDeIngreso.getText()));
+
+            boolean estado = chbtnActivo.isSelected();
+            ps.setBoolean(6, estado);
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Cliente guardado correctamente");
+            limpiarCampos();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar cliente: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "UPDATE clientes SET nombre=?, telefono=?, correo=?, direccion=?, fecha_ingreso=?, estado=? WHERE cliente_id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, txtINombre.getText());
+            ps.setString(2, txtTeléfono.getText());
+            ps.setString(3, txtCorreo.getText());
+            ps.setString(4, txtDireccion.getText());
+            ps.setDate(5, java.sql.Date.valueOf(txtFechaDeIngreso.getText()));
+
+            boolean estado = chbtnActivo.isSelected();
+            ps.setBoolean(6, estado);
+            ps.setInt(7, Integer.parseInt(txtId.getText()));
+
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente");
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el cliente");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar cliente: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtTeléfonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTeléfonoActionPerformed
@@ -341,17 +397,53 @@ public class Clientes extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTeléfonoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "SELECT * FROM clientes WHERE cliente_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(txtId.getText()));
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                txtINombre.setText(rs.getString("nombre"));
+                txtTeléfono.setText(rs.getString("telefono"));
+                txtCorreo.setText(rs.getString("correo"));
+                txtDireccion.setText(rs.getString("direccion"));
+                txtFechaDeIngreso.setText(String.valueOf(rs.getDate("fecha_ingreso")));
+
+                boolean estado = rs.getBoolean("estado");
+                chbtnActivo.setSelected(estado);
+                chbtnInactivo.setSelected(!estado);
+            } else {
+                JOptionPane.showMessageDialog(this, "Cliente no encontrado");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al consultar cliente: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void chbtnInactivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbtnInactivoActionPerformed
-        // TODO add your handling code here:
+        if (chbtnInactivo.isSelected()) {
+            chbtnActivo.setSelected(false);
+        }
     }//GEN-LAST:event_chbtnInactivoActionPerformed
 
     private void chbtnActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbtnActivoActionPerformed
-        // TODO add your handling code here:
+        if (chbtnActivo.isSelected()) {
+            chbtnInactivo.setSelected(false);
+        }
     }//GEN-LAST:event_chbtnActivoActionPerformed
-
+    
+    private void limpiarCampos() {
+        txtId.setText("");
+        txtINombre.setText("");
+        txtTeléfono.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");
+        txtFechaDeIngreso.setText("");
+        buttonGroupEstado.clearSelection();
+    }
+    
     /**
      * @param args the command line arguments
      */
