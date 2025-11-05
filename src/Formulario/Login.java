@@ -8,21 +8,18 @@ import Conexion.CreateConection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.swing.JOptionPane; 
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author 15EGO500LA
- */
+
+
 public class Login extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 
-    /**
-     * Creates new form Sesion
-     */
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null); // Centrar ventana
+        this.setTitle("Inicio de Sesión - Restaurante");
     }
 
     /**
@@ -38,7 +35,7 @@ public class Login extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         lblUsuario1 = new javax.swing.JLabel();
-        txtUsuario1 = new javax.swing.JTextField();
+        txtContrasena = new javax.swing.JTextField();
         lblLogo = new javax.swing.JLabel();
         btnIniciar = new javax.swing.JButton();
 
@@ -76,7 +73,7 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -96,7 +93,7 @@ public class Login extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnIniciar)
                 .addContainerGap(23, Short.MAX_VALUE))
@@ -123,77 +120,54 @@ public class Login extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
     String usuario = txtUsuario.getText().trim();
-    String clave = txtUsuario1.getText().trim(); // tu segundo campo de texto es para la contraseña
+        String clave = txtContrasena.getText().trim();
 
-    if (usuario.isEmpty() || clave.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Debe ingresar usuario y contraseña", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (usuario.isEmpty() || clave.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar usuario y contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    try {
-        CreateConection conexionPostgres = new CreateConection();
-        Connection con = conexionPostgres.getConection();
+        try {
+            CreateConection conexionPostgres = new CreateConection();
+            Connection con = conexionPostgres.getConection();
 
-        // 🔹 Se agregó la condición "AND estado = TRUE" para impedir acceso a usuarios dados de baja
-        String sql = "SELECT nombre_usuario, rol FROM usuarios WHERE nombre_usuario = ? AND clave = ? AND estado = TRUE;";
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, usuario);
-        pst.setString(2, clave);
+            String sql = "SELECT nombre_usuario, rol, estado FROM usuarios WHERE nombre_usuario = ? AND clave = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, usuario);
+            pst.setString(2, clave);
+            ResultSet rs = pst.executeQuery();
 
-        ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                boolean activo = rs.getBoolean("estado");
+                if (!activo) {
+                    JOptionPane.showMessageDialog(this, "El usuario ha sido dado de baja. Contacte al administrador.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
-        if (rs.next()) {
-            String rol = rs.getString("rol");
-            JOptionPane.showMessageDialog(this, "Bienvenido " + usuario + " (" + rol + ")");
+                String rol = rs.getString("rol");
+                JOptionPane.showMessageDialog(this, "Bienvenido " + usuario + " (" + rol + ")");
 
-            // Redirigir según el rol
-            if (rol.equalsIgnoreCase("administrador")) {
-                new restaurante.MainPrincipal(usuario, rol).setVisible(true);
-            } else if (rol.equalsIgnoreCase("cajero")) {
-                new Formulario.Factura().setVisible(true);
-            } else if (rol.equalsIgnoreCase("mesero")) {
-                new Formulario.Factura().setVisible(true); // puedes crear otra interfaz si deseas
-            }
+                // Abre el menú principal y pasa el usuario + rol
+                new Formulario.Menu(usuario, rol).setVisible(true);
+                this.dispose();
 
-            this.dispose(); // cierra la ventana de login
-        } else {
-            // 🔸 Mensaje claro cuando el usuario existe pero está dado de baja
-            String sqlEstado = "SELECT estado FROM usuarios WHERE nombre_usuario = ? AND clave = ?";
-            PreparedStatement pstEstado = con.prepareStatement(sqlEstado);
-            pstEstado.setString(1, usuario);
-            pstEstado.setString(2, clave);
-            ResultSet rsEstado = pstEstado.executeQuery();
-
-            if (rsEstado.next() && !rsEstado.getBoolean("estado")) {
-                JOptionPane.showMessageDialog(this, "El usuario ha sido dado de baja. Contacte al administrador.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            rsEstado.close();
-            pstEstado.close();
+            rs.close();
+            pst.close();
+            con.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        rs.close();
-        pst.close();
-        con.close();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-        
-        
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -204,9 +178,7 @@ public class Login extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
 
@@ -216,7 +188,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblUsuario1;
+    private javax.swing.JTextField txtContrasena;
     private javax.swing.JTextField txtUsuario;
-    private javax.swing.JTextField txtUsuario1;
     // End of variables declaration//GEN-END:variables
 }

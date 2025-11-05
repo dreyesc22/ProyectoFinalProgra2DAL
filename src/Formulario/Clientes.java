@@ -92,7 +92,7 @@ public class Clientes extends javax.swing.JFrame {
         jCheckBoxMenuItem4.setSelected(true);
         jCheckBoxMenuItem4.setText("jCheckBoxMenuItem4");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(51, 204, 255));
 
@@ -167,6 +167,7 @@ public class Clientes extends javax.swing.JFrame {
             }
         });
 
+        chbtnActivo.setBackground(new java.awt.Color(51, 204, 255));
         buttonGroupEstado.add(chbtnActivo);
         chbtnActivo.setForeground(new java.awt.Color(255, 255, 255));
         chbtnActivo.setText("Activo");
@@ -176,6 +177,7 @@ public class Clientes extends javax.swing.JFrame {
             }
         });
 
+        chbtnInactivo.setBackground(new java.awt.Color(51, 204, 255));
         buttonGroupEstado.add(chbtnInactivo);
         chbtnInactivo.setForeground(new java.awt.Color(255, 255, 255));
         chbtnInactivo.setText("Inactivo");
@@ -303,7 +305,7 @@ public class Clientes extends javax.swing.JFrame {
                     .addComponent(btnEliminar)
                     .addComponent(btnEditar)
                     .addComponent(btnBuscar))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

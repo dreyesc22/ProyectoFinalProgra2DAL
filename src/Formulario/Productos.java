@@ -93,7 +93,7 @@ public class Productos extends javax.swing.JFrame {
         jCheckBoxMenuItem4.setSelected(true);
         jCheckBoxMenuItem4.setText("jCheckBoxMenuItem4");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(51, 204, 255));
 

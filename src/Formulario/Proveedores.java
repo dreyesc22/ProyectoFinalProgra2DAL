@@ -73,7 +73,7 @@ public class Proveedores extends javax.swing.JFrame {
         btnVerActivos = new javax.swing.JButton();
         btnVerTodos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(51, 204, 255));
 

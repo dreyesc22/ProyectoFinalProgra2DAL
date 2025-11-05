@@ -70,7 +70,7 @@ public class Reportes extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         RBVentasProductos = new javax.swing.JRadioButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
