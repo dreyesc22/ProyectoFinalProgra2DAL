@@ -4,21 +4,18 @@
  */
 package Formulario;
 
-import javax.swing.JOptionPane;
 import Conexion.CreateConection;
-import java.sql.SQLException;
-// librerias para manipular datos
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author tigo2024
- */
+
+
+
 public class Proveedores extends javax.swing.JFrame {
     CreateConection  conexionPostgres = new CreateConection();
     Connection con;
@@ -28,7 +25,19 @@ public class Proveedores extends javax.swing.JFrame {
     public Proveedores() throws SQLException {
         initComponents();
           con = conexionPostgres.getConection();
+        
     }
+    private void limpiarCampos() {
+        txtId.setText("");
+        txtNombreProveedor.setText("");
+        txtNIT.setText("");
+        txtNombreContacto.setText("");
+        txtDireccion.setText("");
+        txtTelefonoEmpresa.setText("");
+        txtTelefonoContacto.setText("");
+        txtEstado.setText("");
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,6 +48,7 @@ public class Proveedores extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         lblId = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -48,9 +58,9 @@ public class Proveedores extends javax.swing.JFrame {
         txtNombreContacto = new javax.swing.JTextField();
         txtTelefonoContacto = new javax.swing.JTextField();
         btnConsultar = new javax.swing.JButton();
-        btnGuardar = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
+        btnEstado = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtTelefonoEmpresa = new javax.swing.JTextField();
@@ -58,15 +68,25 @@ public class Proveedores extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtDireccion = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtEstado = new javax.swing.JTextField();
+        btnVerActivos = new javax.swing.JButton();
+        btnVerTodos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(51, 204, 255));
+
+        lblId.setForeground(new java.awt.Color(0, 0, 0));
         lblId.setText("Id");
 
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre del Proveedor");
 
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Nombre del contacto");
 
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Teléfono del contacto");
 
         txtTelefonoContacto.addActionListener(new java.awt.event.ActionListener() {
@@ -82,10 +102,10 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
@@ -96,113 +116,168 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnEstado.setText("Activo/Inactivo");
+        btnEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnEstadoActionPerformed(evt);
             }
         });
 
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Proveedores");
 
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Teléfono de la empresa");
 
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("NIT");
 
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Dirección");
+
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Estado");
+
+        btnVerActivos.setText("Ver Prov. Activos");
+        btnVerActivos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerActivosActionPerformed(evt);
+            }
+        });
+
+        btnVerTodos.setText("Ver Todos Prov.");
+        btnVerTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 684, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(277, 277, 277)
+                            .addComponent(jLabel1))
+                        .addComponent(jLabel3)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addComponent(jLabel7)
+                            .addGap(76, 76, 76)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(66, 66, 66)
+                            .addComponent(jLabel8))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnConsultar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnRegistrar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnActualizar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnEstado)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnVerActivos)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnVerTodos))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(46, 46, 46)
+                                    .addComponent(lblId)))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(66, 66, 66)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel4))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addGap(59, 59, 59)
+                                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 316, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(28, 28, 28)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblId)
+                                .addComponent(jLabel6))
+                            .addGap(37, 37, 37)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                            .addGap(42, 42, 42)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtNombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(34, 34, 34)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5))
+                            .addGap(45, 45, 45)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4))))
+                    .addGap(18, 18, 18)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(30, 30, 30)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnConsultar)
+                        .addComponent(btnRegistrar)
+                        .addComponent(btnActualizar)
+                        .addComponent(btnEstado)
+                        .addComponent(btnVerActivos)
+                        .addComponent(btnVerTodos))
+                    .addContainerGap()))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(64, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnConsultar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnActualizar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(lblId)
-                            .addComponent(jLabel3)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(253, 253, 253)
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(311, 311, 311)
-                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblId)
-                        .addGap(43, 43, 43)
-                        .addComponent(jLabel2)
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel3))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(42, 42, 42)
-                        .addComponent(txtNombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
-                        .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnConsultar)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnActualizar)
-                    .addComponent(btnEliminar))
-                .addGap(28, 28, 28))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -210,129 +285,224 @@ public class Proveedores extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         try {
-            int id = Integer.parseInt(txtId.getText());
-            String qry = "SELECT nombre_proveedor, nit, nombre_contacto, direccion, telefono_empresa, telefono_contacto " +
-                         "FROM public.proveedores WHERE proveedor_id = " + id;
-
-            Statement smt = con.createStatement();
-            ResultSet rs = smt.executeQuery(qry);
-
-            if (rs.next()) {
-                txtNombreProveedor.setText(rs.getString("nombre_proveedor"));
-                txtNIT.setText(rs.getString("nit"));
-                txtNombreContacto.setText(rs.getString("nombre_contacto"));
-                txtDireccion.setText(rs.getString("direccion"));
-                txtTelefonoEmpresa.setText(rs.getString("telefono_empresa"));
-                txtTelefonoContacto.setText(rs.getString("telefono_contacto"));
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró proveedor con ID " + id);
-            }
-
-            rs.close();
-            smt.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al consultar: " + e.getMessage());
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID válido.");
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido.");
+            return;
         }
-  
- //JOptionPane.showMessageDialog(null, "Hola Mundo");
+
+        int id = Integer.parseInt(txtId.getText());
+        String sql = "SELECT * FROM proveedores WHERE proveedor_id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, id);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            txtNombreProveedor.setText(rs.getString("nombre_proveedor"));
+            txtNIT.setText(rs.getString("nit"));
+            txtNombreContacto.setText(rs.getString("nombre_contacto"));
+            txtDireccion.setText(rs.getString("direccion"));
+            txtTelefonoEmpresa.setText(rs.getString("telefono_empresa"));
+            txtTelefonoContacto.setText(rs.getString("telefono_contacto"));
+            txtEstado.setText(rs.getBoolean("estado") ? "Activo" : "Inactivo");
+        } else {
+            JOptionPane.showMessageDialog(this, "Proveedor no encontrado.");
+            limpiarCampos();
+        }
+
+        rs.close();
+        pst.close();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID debe ser numérico.");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al consultar proveedor: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         try {
-            String nombreProveedor = txtNombreProveedor.getText();
-            String nit = txtNIT.getText();
-            String nombreContacto = txtNombreContacto.getText();
-            String direccion = txtDireccion.getText();
-            String telefonoEmpresa = txtTelefonoEmpresa.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
+        String sql = "INSERT INTO proveedores (nombre_proveedor, nit, nombre_contacto, direccion, telefono_empresa, telefono_contacto, estado) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, TRUE)";
+        PreparedStatement pst = con.prepareStatement(sql);
 
-            String qry = "INSERT INTO public.proveedores(nombre_proveedor, nit, nombre_contacto, direccion, telefono_empresa, telefono_contacto) " +
-                         "VALUES ('" + nombreProveedor + "', '" + nit + "', '" + nombreContacto + "', '" + direccion + "', '" + telefonoEmpresa + "', '" + telefonoContacto + "')";
+        pst.setString(1, txtNombreProveedor.getText());
+        pst.setString(2, txtNIT.getText());
+        pst.setString(3, txtNombreContacto.getText());
+        pst.setString(4, txtDireccion.getText());
+        pst.setString(5, txtTelefonoEmpresa.getText());
+        pst.setString(6, txtTelefonoContacto.getText());
 
-            Statement smt = con.createStatement();
-            int filasInsertadas = smt.executeUpdate(qry);
-
-            if (filasInsertadas > 0) {
-                JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.");
-            }
-
-            smt.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
-        }
-        
-    }//GEN-LAST:event_btnGuardarActionPerformed
+        pst.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Proveedor registrado correctamente.");
+        limpiarCampos();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al registrar proveedor: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         try {
-            int id = Integer.parseInt(txtId.getText());
-            String nombreProveedor = txtNombreProveedor.getText();
-            String nit = txtNIT.getText();
-            String nombreContacto = txtNombreContacto.getText();
-            String direccion = txtDireccion.getText();
-            String telefonoEmpresa = txtTelefonoEmpresa.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
-
-            String qry = "UPDATE public.proveedores SET nombre_proveedor='" + nombreProveedor +
-                         "', nit='" + nit + "', nombre_contacto='" + nombreContacto +
-                         "', direccion='" + direccion + "', telefono_empresa='" + telefonoEmpresa +
-                         "', telefono_contacto='" + telefonoContacto +
-                         "' WHERE proveedor_id=" + id;
-
-            Statement smt = con.createStatement();
-            int filasActualizadas = smt.executeUpdate(qry);
-
-            if (filasActualizadas > 0) {
-                JOptionPane.showMessageDialog(null, "Proveedor actualizado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró proveedor con ID " + id);
-            }
-
-            smt.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID válido.");
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido para actualizar.");
+            return;
         }
+
+        int id = Integer.parseInt(txtId.getText());
+        String sql = "UPDATE proveedores SET nombre_proveedor=?, nit=?, nombre_contacto=?, direccion=?, telefono_empresa=?, telefono_contacto=? WHERE proveedor_id=?";
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setString(1, txtNombreProveedor.getText());
+        pst.setString(2, txtNIT.getText());
+        pst.setString(3, txtNombreContacto.getText());
+        pst.setString(4, txtDireccion.getText());
+        pst.setString(5, txtTelefonoEmpresa.getText());
+        pst.setString(6, txtTelefonoContacto.getText());
+        pst.setInt(7, id);
+
+        int filas = pst.executeUpdate();
+        if (filas > 0) {
+            JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el proveedor con ese ID.");
+        }
+
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al actualizar proveedor: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido.");
+    }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-            int id = Integer.parseInt(txtId.getText());
-            String qry = "DELETE FROM public.proveedores WHERE proveedor_id=" + id;
+    private void btnEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadoActionPerformed
+       try {
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido.");
+            return;
+        }
 
-            Statement smt = con.createStatement();
-            int filasEliminadas = smt.executeUpdate(qry);
+        int id = Integer.parseInt(txtId.getText());
+        String sqlSelect = "SELECT estado FROM proveedores WHERE proveedor_id = ?";
+        PreparedStatement pstSelect = con.prepareStatement(sqlSelect);
+        pstSelect.setInt(1, id);
+        ResultSet rs = pstSelect.executeQuery();
 
-            if (filasEliminadas > 0) {
-                JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente.");
-                txtNombreProveedor.setText("");
-                txtNIT.setText("");
-                txtNombreContacto.setText("");
-                txtDireccion.setText("");
-                txtTelefonoEmpresa.setText("");
-                txtTelefonoContacto.setText("");
+        if (rs.next()) {
+            boolean estadoActual = rs.getBoolean("estado");
+            boolean nuevoEstado = !estadoActual;
+
+            String sqlUpdate = "UPDATE proveedores SET estado = ? WHERE proveedor_id = ?";
+            PreparedStatement pstUpdate = con.prepareStatement(sqlUpdate);
+            pstUpdate.setBoolean(1, nuevoEstado);
+            pstUpdate.setInt(2, id);
+
+            int filas = pstUpdate.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El proveedor ahora está " + (nuevoEstado ? "Activo" : "Inactivo") + ".");
+                txtEstado.setText(nuevoEstado ? "Activo" : "Inactivo");
             } else {
-                JOptionPane.showMessageDialog(null, "No se encontró proveedor con ID " + id);
+                JOptionPane.showMessageDialog(this, "No se encontró el proveedor.");
             }
 
-            smt.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar: " + e.getMessage());
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID válido.");
+            pstUpdate.close();
+        } else {
+            JOptionPane.showMessageDialog(this, "Proveedor no encontrado.");
         }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+
+        rs.close();
+        pstSelect.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al cambiar estado: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Debe ingresar un ID numérico válido.");
+    }
+    }//GEN-LAST:event_btnEstadoActionPerformed
 
     private void txtTelefonoContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoContactoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoContactoActionPerformed
+
+    private void btnVerActivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActivosActionPerformed
+       try {
+        String sql = "SELECT proveedor_id, nombre_proveedor, nombre_contacto, telefono_empresa, estado "
+                   + "FROM proveedores WHERE estado = TRUE";
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        StringBuilder tabla = new StringBuilder();
+        tabla.append(String.format("%-5s | %-25s | %-20s | %-15s | %-10s%n",
+                "ID", "Proveedor", "Contacto", "Teléfono", "Estado"));
+        tabla.append("--------------------------------------------------------------------------\n");
+
+        boolean hayDatos = false;
+        while (rs.next()) {
+            hayDatos = true;
+            tabla.append(String.format("%-5d | %-25s | %-20s | %-15s | %-10s%n",
+                    rs.getInt("proveedor_id"),
+                    rs.getString("nombre_proveedor"),
+                    rs.getString("nombre_contacto"),
+                    rs.getString("telefono_empresa"),
+                    "Activo"));
+        }
+
+        if (hayDatos) {
+            javax.swing.JTextArea ta = new javax.swing.JTextArea(tabla.toString());
+            ta.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+            JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(ta),
+                    "Proveedores Activos", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay proveedores activos registrados.");
+        }
+
+        rs.close();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener proveedores: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnVerActivosActionPerformed
+
+    private void btnVerTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosActionPerformed
+        try {
+        String sql = "SELECT proveedor_id, nombre_proveedor, nombre_contacto, telefono_empresa, estado FROM proveedores";
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        StringBuilder tabla = new StringBuilder();
+        tabla.append(String.format("%-5s | %-25s | %-20s | %-15s | %-10s%n",
+                "ID", "Proveedor", "Contacto", "Teléfono", "Estado"));
+        tabla.append("--------------------------------------------------------------------------\n");
+
+        boolean hayDatos = false;
+        while (rs.next()) {
+            hayDatos = true;
+            tabla.append(String.format("%-5d | %-25s | %-20s | %-15s | %-10s%n",
+                    rs.getInt("proveedor_id"),
+                    rs.getString("nombre_proveedor"),
+                    rs.getString("nombre_contacto"),
+                    rs.getString("telefono_empresa"),
+                    rs.getBoolean("estado") ? "Activo" : "Inactivo"));
+        }
+
+        if (hayDatos) {
+            javax.swing.JTextArea ta = new javax.swing.JTextArea(tabla.toString());
+            ta.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+            JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(ta),
+                    "Todos los Proveedores", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay proveedores registrados.");
+        }
+
+        rs.close();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener proveedores: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnVerTodosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,6 +537,14 @@ public class Proveedores extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -383,8 +561,10 @@ public class Proveedores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnConsultar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnEstado;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVerActivos;
+    private javax.swing.JButton btnVerTodos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -392,8 +572,11 @@ public class Proveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblId;
     private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNIT;
     private javax.swing.JTextField txtNombreContacto;
